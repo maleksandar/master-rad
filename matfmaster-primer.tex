@@ -11,7 +11,10 @@
 
 % Paket koji definiše sve specifičnosti mastera Matematičkog fakulteta
 \usepackage[latinica]{matfmaster}
-%
+\usepackage{graphicx}
+
+\definecolor{codegray}{gray}{0.9}
+\newcommand{\code}[1]{\colorbox{codegray}{\texttt{\scalebox{0.9}{#1}}}}%
 % Podrazumevano pismo je ćirilica.
 %   Ako koristite pdflatex, a ne xetex, sav latinički tekst na srpskom jeziku
 %   treba biti okružen sa \lat{...} ili \begin{latinica}...\end{latinica}.
@@ -44,10 +47,135 @@
 % se koristi pdflatex. Zakomentarisati ako na sistemu koji koristite ovaj
 % paket nije dostupan ili ako ne radi ispravno.
 \usepackage{cmsrb}
-
+\usepackage[font={small}]{caption}
 % Ostali paketi koji se koriste u dokumentu
 \usepackage{listings} % listing programskog koda
+\usepackage{color} %use color
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
 
+% %Customize a bit the look
+% \lstset{ %
+% backgroundcolor=\color{white}, % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+% basicstyle=\footnotesize, % the size of the fonts that are used for the code
+% breakatwhitespace=false, % sets if automatic breaks should only happen at whitespace
+% breaklines=true, % sets automatic line breaking
+% captionpos=b, % sets the caption-position to bottom
+% commentstyle=\color{mygreen}, % comment style
+% deletekeywords={...}, % if you want to delete keywords from the given language
+% escapeinside={\%*}{*)}, % if you want to add LaTeX within your code
+% extendedchars=true, % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+% frame=false, % adds a frame around the code
+% keepspaces=true, % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+% keywordstyle=\color{blue}, % keyword style
+% % language=Octave, % the language of the code
+% morekeywords={*,...}, % if you want to add more keywords to the set
+% numbers=left, % where to put the line-numbers; possible values are (none, left, right)
+% numbersep=5pt, % how far the line-numbers are from the code
+% numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+% rulecolor=\color{black}, % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+% showspaces=false, % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+% showstringspaces=false, % underline spaces within strings only
+% showtabs=false, % show tabs within strings adding particular underscores
+% stepnumber=1, % the step between two line-numbers. If it's 1, each line will be numbered
+% stringstyle=\color{mymauve}, % string literal style
+% tabsize=2, % sets default tabsize to 2 spaces
+% title=\lstname % show the filename of files included with \lstinputlisting; also try caption instead of title
+% }
+%END of listing package%
+ 
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+%define Javascript language
+\lstdefinelanguage{JavaScript}{
+keywords={typeof, class, extends, export, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+keywordstyle=\color{blue}\bfseries,
+ndkeywords={export, boolean, throw, implements, import, from, this},
+ndkeywordstyle=\color{red}\bfseries,
+identifierstyle=\color{black},
+sensitive=false,
+comment=[l]{//},
+morecomment=[s]{/*}{*/},
+commentstyle=\color{purple}\ttfamily,
+stringstyle=\color{mygreen}\ttfamily,
+moredelim=[s][\color{black}]{\$\{}{\}}, % same as morestring in this case
+morestring=[d]{'},
+morestring=[d]{`},
+morestring=[d]{"},
+}
+
+\lstdefinelanguage{html}{
+keywords={body, div, script},
+keywordstyle=\color{blue}\bfseries,
+ndkeywords={class, export, boolean, throw, implements, import, this},
+ndkeywordstyle=\color{darkgray}\bfseries,
+identifierstyle=\color{black},
+sensitive=false,
+comment=[l]{//},
+morecomment=[s]{/*}{*/},
+commentstyle=\color{purple}\ttfamily,
+stringstyle=\color{mygreen}\ttfamily,
+morestring=[b]',
+morestring=[b]"
+}
+
+\lstset{
+language=JavaScript,
+extendedchars=true,
+basicstyle=\footnotesize\ttfamily,
+backgroundcolor=\color{white},
+showstringspaces=false,
+showspaces=false,
+numbers=none,
+numberstyle=\footnotesize,
+numbersep=9pt,
+tabsize=2,
+breaklines=true,
+showtabs=false,
+captionpos=b,
+}
+
+\lstdefinelanguage{shell}{
+keywords={\$, \> },
+keywordstyle=\color{red}\bfseries,
+ndkeywords={class, export, boolean, throw, implements, import, this},
+ndkeywordstyle=\color{darkgray}\bfseries,
+identifierstyle=\color{black},
+sensitive=false,
+morecomment=[s]{/*}{*/},
+commentstyle=\color{purple}\ttfamily,
+stringstyle=\color{mygreen}\ttfamily,
+morestring=[b]',
+morestring=[b]`,
+morestring=[b]"
+}
+\lstset{
+language=shell,
+extendedchars=true,
+basicstyle=\footnotesize\ttfamily,
+backgroundcolor=\color{lightgray},
+frame=single,
+showstringspaces=false,
+showspaces=false,
+numbers=none,
+numberstyle=\footnotesize,
+numbersep=9pt,
+tabsize=2,
+breaklines=true,
+showtabs=false,
+captionpos=b
+}
+\lstdefinestyle{htmlStyle} {language=html,backgroundcolor=\color{white},frame=single}
+\lstdefinestyle{jsStyle} {language=JavaScript,backgroundcolor=\color{white},frame=single, numbers=left, numberstyle=\tiny, }
+\lstdefinestyle{shellStyle} {language=shell,backgroundcolor=\color{lightgray},frame=single}
+\newcounter{shellRef}[chapter]
+
+\newcommand{\shellcmd}[2]{\\\\\texttt{\footnotesize\$ #1 \null\hfill (\refstepcounter{shellRef}{\theshellRef})\label{#2} }\\\\}
+\renewcommand{\theshellRef}{\thechapter.\number\numexpr\value{shellRef}\relax}
+
+\renewcommand\lstlistingname{Isečak koda}
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
 \bib{matfmaster-primer}
 
@@ -139,120 +267,143 @@ Razrada placeholder
 \section{Upravljanje stanjem}
 \section{Razdvajanje odgovornosti}
 % ------------------------------------------------------------------------------
-\chapter{Dizajn Pure okruženja}
+\chapter{Okruženje Pure}
+Kako bismo se upoznali detaljnije sa novim okruženjem, krenućemo od jednostavnog
+primera, \emph{Hello World (eng. Zdravo Svete)} aplikacije. 
+\section{Podešavanje radnog okruženja}
+Okruženje \emph{Pure} može se preuzeti kroz \emph{npm}\footnote{Upravljač paketa za Node \emph{(eng. Node Package Manager)}} sistem.
+To možemo uraditi na dva načina:
+\begin{enumerate}
+  \item Instaliranjem paketa \code{pure-framework} u već postojeći \emph{npm} modul.
+  \item Pokretanjem skripte za pravljenje \code{hello-world} projekta, bez prethodnog instaliranja \emph{npm} paketa.
+\end{enumerate}
+Ukoliko već imamo svoj \emph{npm} modul u kom pišemo kod, možemo iskoristiti prvi način i instalirati \code{pure-framework} komdanom \ref{cmd:npm-install}:
+\shellcmd{npm install pure-framework}{cmd:npm-install}
+Ovde ćemo, jednostavnosti radi, koristiti drugi pristup u kojem krećemo sa praznim folderom, u kom ćemo pomoću \emph{npx} skripte napraviti početnu "Zdravo Svete" aplikaciju.
+Potrebno je da se u \code{shell}-u pozicioniramo u prazan direktorijum i da odatle pokrenemo komandu \ref{cmd:npx}:
+\shellcmd{npx pure-framework hello-world}{cmd:npx}
+Ova komanda će napraviti novi direktorijum sa nazivom \code{hello-world} i u njega klonirati repozitorijum sa minimalnom \emph{Pure} aplikacijom. 
+Ukoliko je skripta izvršena bez grešaka, direktorijum \code{hello-world} bi trebalo da sadrži fajlove prikazane na slici \ref{fig:hello-world-direktorijum}.
 
-Jedna od prvih odluka pri dizajniranju novog razvojnog okruženja,
-jeste ta koje ćemo jezike i alate koristit pri samom pisanju okruženja.
-Pri izboru jezika i alata važno je naći kompromisno rešenje između modernih
-alata koji daju nove mogućnosti i
-starih i u praksi oprobanih jezika i alata koji nude pouzdanost.
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.5\textwidth]{slike/hello-world-direktorijum.PNG}
+  \caption{Графикон}
+  \label{fig:hello-world-direktorijum}
+\end{figure}
+Kako bismo pokrenuli našu aplikaciju, potrebno je da se pozicioniramo u novonapravljeni direktorijum i instaliramo neophodne \emph{npm} pakete,
+izvršavanjem komande prikazane na isečku \ref{cmd:npm-install-hello-world}:
+\shellcmd{cd hello-world \&\& npm install}{cmd:npm-install-hello-world}
+Nakon što se ova komanda uspešno izvrši, možemo da pokrenemo našu aplikaciju komandom prikazanom na isečku \ref{cmd:npm-start}:
+\shellcmd{npm run start}{cmd:npm-start}
+Ukoliko pokretanje ove komande nije izbacilo grešku, konzola bi trebala da nas obavesti da je server za razvoj pokrenut i da možemo da mu pristupimo na url adresi \code{http://localhost:1234} (Isečak \ref{konzola:npmstart})\\
+\renewcommand\lstlistingname{Izlaz konzole}
+\begin{lstlisting}[style=shellStyle, caption={konzolna poruka nakon pokretanja aplikacije}, label=konzola:npmstart]
+> pure-framework-hello-world-app@1.0.0 start
+> parcel index.html
 
-Jezik korišćen za pravljenje "Pure" razvojnog okruženja je TypeScript. TypeScript je
-jezik razvijen od strane Microsoft-a kao alternativa JavaScript-u i zamišljen je kao njegov nadskup sa sistemom striktnih tipova podataka.
-TypeScript je jezik koji se transpajlira na JavaScript korišćenjem TypeScript kompajlera.
+Server running at http://localhost:1234
+Built in 27ms
+\end{lstlisting}
+\renewcommand\lstlistingname{Isečak koda}
 
-Pošto je važno da proces prevođenja i testiranja razvoja što više automatizujemo i samim tim ubrzamo, neophodno je koristiti i "package bundler". 
-Package bundler, pored toga što nam omogućava brže (manuelno) testiranje, koristi i tome da krajnjem korisniku razvojno okruženje isporučimo sa minifikovanim kodom.
+Ukoliko u pretraživaču otvorimo url stranicu \code{http://localhost:1234}, trebalo bi da vidimo stranicu koja izgleda kao na slici \ref{fig:hello-world} 
 
-Zbog minimalne potrebne konfiguracije Parcel je delovao kao odličan izbor.
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{slike/hello-world-strana.PNG}
+  \caption{Hello World aplikacija, pokrenuta na lokalnom serveru.}
+  \label{fig:hello-world}
+\end{figure}
 
-\section{Dizajn elementi okruženja}
-Jedna od specifičnijih stvari pri korišćenju React razvojnog okruženja jeste korišćenje JSX (ili TSX u Typescript verziji) jezika, koji objedinjuje JavaScript i HTML elemente u jednu
-celinu i omogućava nam da html šablonima upravljamo kao objektima u JavaScript-u. Način na koji React ovo izvodi sastoji se u koraku transpilacije JSX fajla u JavaScript gde se svi elementi pisani html sintaksom prevode u čist JavaScript. 
-Ovo, iako često može biti veoma korisna stvar, ponekad može da donese više problema nego rešava. Naime, iako kod koji koristimo za opisivanje vizuelne reprezentacije komponenata podseća na html,
-on definitivno nije html, pa iz toga proizilaze ponekad čudne posledice. Na primer: ključnu reč 'class' ne možemo koristi u okviru JSX-template sintakse (zato što je 
-'class' istovremeno rezervisana reč i u JavaScript-u i u HTML-u). Ovo je samo jedna dobro poznata "greška u dizajnu", dok su mnoge druge daleko prikrivenije i samim tim eventualne programerske greške koje mogu nastati pri transpilaciji mogu biti jako teške za otkrivanje.
-Kako bi "Pure" framework zadržao mogućnost upravljanja komponenatama nivoa pogleda kao regularnim JavaScript objektima, a istovremeno izbegao eventualne komplikacije koje uvode jezici kao što je to JSX, kao deo Pure razvojnog okruženja napisana je biblioteka za opis sloja pogleda komponente.
-\section{Biblioteka dom elemenata}
-Biblioteka dom elemenata zamišljena je kao zamena za template engine
-\section{Reaktivno programiranje}
-\section{Optimizacije}
+\section{Struktura aplikacije}
+Pogledajmo sada sadržaj fajlova koje smo napravili u koraku \ref{cmd:npx}.
+Primetićemo da fajlovi \code{index.html} i \code{index.ts} gotovo da ne sadrže nikakvu programsku logiku ili opis strukture DOM\footnote{ Document Object Model} drveta.
+U narednim poglavljima upoznaćemo se detaljnije sa svrhom ovih fajlova, ali ćemo te detalje za sada preskočiti.
 
-\chapter{Primer kroz TODO aplikaciju}
-\chapter{Primeri korišćenja}
-% ------------------------------------------------------------------------------
-% \section{Примери коришћења класичних \LaTeX{} елемената}
-% % primeri citiranja
-% Ово је реченица у којој се јавља цитат \cite{PetrovicMikic2015}.
-% Још један цитат \cite{GuSh:243}.
-% % primeri navodnika
-% Испробавамо наводнике: "Рекао је да му се јавимо сутра".
-% % primer referisanja na tabelu (koja se javlja kasnije)
-% У табели \ref{tbl:rezultati} која следи приказани су резултати експеримента.
-% % primer kraćeg latiničkog teksta
-% Ovo je primer rečenice ispisane latiničkim pismom u okviru ćiriličkog dokumenta.
-% У овој реченици се налази једна {\lat reč} написана латиницом.
-% % primer korišćenja fusnota
-% Иза ове реченице следи фуснота.\footnote{Ово је фуснота.}
-% % primer url-a
-% Сајт математичког факултета је \url{http://www.matf.bg.ac.rs}.
+Fajl koji sadrži centralnu logiku naše aplikacije je \code{src/App.ts} (Isečak \ref{file:app.ts})
+\pagebreak
+\begin{lstlisting}[style=jsStyle, caption={Sadržaj fajla \code{App.ts}},label=file:app.ts]
+import { Component, componentFactory, Store } from "pure-framework/core";
+import { div, span } from "pure-framework/htmlElements";
+import { AppModel } from "./model";
 
-% % primer dužeg latiničkog teksta
-% \begin{latinica}
-%   Ovo je malo duži blok teksta ispisan latiničkim pismom u okviru
-%   ćiriličkog dokumenta. Fijuče vetar u šiblju, ledi pasaže i kuće iza
-%   njih i gunđa u odžacima.
-% \end{latinica}
+class AppComponent extends Component<AppModel> {
+  template() {
+    return div({ class: 'app-root'}, [
+      span(`Hello ${this.state.name}! Welcome! `),
+      span(`The answer to the utimate question of life, the universe and everything is: ${this.state.answer}`)
+    ]);
+  }
+}
+export const app = componentFactory(AppComponent);
+\end{lstlisting}
 
-% % primer korišćenja tabele
-% \begin{table}
-% \centering
-% \caption{Резултати}
-% \label{tbl:rezultati}
-% \begin{tabular}{c>{\centering}p{2cm}c}
-% \toprule
-% 1 & 2 & 3\\\midrule
-% 4 & 5 & 6\\\cmidrule(rl){1-2}
-% 7 & 8 & 8\\
-% \bottomrule
-% \end{tabular}
-% \end{table}
+Ukoliko pogledamo aplikaciju u pretraživaču (slika \ref{fig:hello-world})
+videćemo da struktura elemenata DOM-a odgovara strukturi koju vraća funkcija \code{template()}.
 
-% % primer korišćenja slike
-% \begin{figure}[!ht]
-%   \centering
-%   \includegraphics[width=0.5\textwidth]{graph.png}
-%   \caption{Графикон}
-%   \label{fig:grafikon}
-% \end{figure}
+Recimo da želimo da dodelimo ponašanje našoj aplikaciji, tako da svaki put kada kliknemo na <div> element
+povećamo brojač za jedan i ime promenimo na "Ford". To možemo da uradimo tako što ćemo izmeniti funkciju \code{template()} na sledeći način:
 
-% % primer jednostavnije matematičke formule
-% Ево и један пример математичке формуле: $e^{i\pi} + 1 = 0$. 
-% % primer referisanja na sliku
-% На слици \ref{fig:grafikon} приказан је један графикон.
+\begin{lstlisting}[style=jsStyle, firstnumber=6, caption={Fajl \code{App.ts} nakon dodate funkcionalnosti},label=file:app.ts:2]
+template() {
+  return div({ class: 'app-root'}, [
+      span(`Hello ${this.state.name}! Welcome! `),
+      span(`The answer to the utimate question of life, the universe and everything is: ${this.state.answer}`)
+  ]).on('click', () => {
+    store.updateState({
+      answer: this.state.answer + 1,
+      name: 'Ford'
+    })
+  });
+}
+\end{lstlisting}
+\pagebreak
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{slike/hello-ford.PNG}
+  \caption{Hello World aplikacija, pokrenuta na lokalnom serveru.}
+  \label{fig:hello-ford}
+\end{figure}
 
-% % primer kompleksnije matematičke formule
-% $$
-% \int_a^b f(x)\ \mathrm{d}x \ =_{def}\ \lim_{\max{\Delta x_k \rightarrow 0}} \sum_{k=1}^n f(x_k^*)\Delta x_k
-% $$
+Ukoliko otvorimo ponovo našu aplikaciju u pretraživaču i kliknemo na nju dva puta,
+trebalo bi da uоčimo da broj koji se prikazuje na kraju poruke više nije 42, već 44,
+dok je pozdravna poruka ovog puta, umesto Arturu, namenjena Fordu (slika \ref{fig:hello-ford})
 
-% % primer referisanja na poglavlja i strane poglavlja
-% Више детаља биће дато у глави \ref{chp:razrada} на страни \pageref{chp:razrada}.
+% U kasnijim poglavljima ćemo se detaljnije upoznati sa time kako ovaj kod zapravo radi.
+\section{ Aplikacija "Menadžer Zadataka"}
+Pogledaćemo sada malo kompleksniji primer.
+U pitanju je aplikacija za upravljanje dnevnim obavezama\footnote{\emph{(eng. TO-DO)} lista.}.
+Online verzija ove aplikacije nalazi se na stranici \url{https://pure-framework-todo-demo.netlify.app/}
+(Slika \ref{fig:todo-app})
 
-% % primer listinga koda
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.5\textwidth]{slike/todo-app-online.PNG}
+  \caption{TO DO aplikacija, dostupna online}
+  \label{fig:todo-app}
+\end{figure}
+\pagebreak
 
-% У тезу можемо убацити и програмски кôд.
+\begin{lstlisting}[style=jsStyle, firstnumber=6, caption={Fajl \code{App.ts} nakon dodate funkcionalnosti},label=file:app.ts:2]
+import { Component, componentFactory } from "./core";
+import { button, div, header, inputText, italic, li, span, ul } from "./htmlElements";
+import { ButtonElement } from "./htmlElements/block-elements/buttonElement";
 
-% \begin{verbatim}
-% Ovo je doslovni tekst.
-% \end{verbatim}
+import { store } from "./stores/todo.store";
+import { ToDoState } from "./models"
 
-% % \begin{english}
-% \lstset{
-%   language=C,
-%   basicstyle=\ttfamily,
-%   keywordstyle=\color{blue}
-% }
-% \begin{lstlisting}
-% #include <stdio.h>
-
-% int main() {
-%    printf("Hello, world!\n");
-%    return 0;
-% }
-% \end{lstlisting}
-% % \end{english}
-
+class ToDoListComponent extends Component<ToDoState> {
+  template() {
+    return div({ class: 'wrapper' }, [
+      ...this.headerSegment(),
+      this.todoSegment(),
+      this.footerSegment(),
+    ]);
+  }
+  ...
+}
+  \end{lstlisting}
 
 Овај C програм се може превести помоћу преводиоца GCC \cite{gcc}.
 
