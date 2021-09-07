@@ -12,7 +12,6 @@
 % Paket koji definiše sve specifičnosti mastera Matematičkog fakulteta
 \usepackage[latinica]{matfmaster}
 \usepackage{graphicx}
-\usepackage{pangrami}
 
 % Paket koji obezbeđuje ispravni prikaz ćiriličkih italik slova kada
 % se koristi pdflatex. Zakomentarisati ako na sistemu koji koristite ovaj
@@ -57,7 +56,7 @@
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 \definecolor{codegray}{gray}{0.9}
-\newcommand{\code}[1]{\colorbox{codegray}{\texttt{\scalebox{0.9}{#1}}}}%
+\newcommand{\code}[1]{\allowbreak{\colorbox{codegray}{\texttt{\scalebox{0.9}{#1}}}}}%
 
 \newcounter{shellRef}[chapter]
 
@@ -80,7 +79,7 @@
    \refstepcounter{lstnumber}
   }%
 }
-
+\hyphenation{Functional-Element HTML-Functional-Element}
 \makeatother
 % %Customize a bit the look
 % \lstset{ %
@@ -204,12 +203,12 @@ captionpos=b
 \renewcommand\lstlistingname{Primer koda}
 \setlist[enumerate]{itemsep=0mm}
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
-\bib{matfmaster-primer}
+\bib{AleksandarMilosavljevic_master-rad}
 
 % Ime kandidata na srpskom jeziku (u odabranom pismu)
 \autor{Aleksandar Milosavljević}
 % Naslov teze na srpskom jeziku (u odabranom pismu)
-\naslov{Razvoj "Pure" okruženja za razvoj veb interfejsa}
+\naslov{Razvoj okruženja "Pure" za razvoj veb interfejsa}
 % Godina u kojoj je teza predana komisiji
 \godina{2021}
 % Ime i afilijacija mentora (u odabranom pismu)
@@ -223,15 +222,15 @@ captionpos=b
 % Ime i afilijacija četvrtog člana komisije (opciono)
 % \komisijaD{}
 % Datum odbrane (obrisati ili iskomentarisati narednu liniju ako datum odbrane nije poznat)
-\datumodbrane{15. јануар 2016.}
+\datumodbrane{\_\_\_\_\_\_\_\_\_\_\_\_}
 
 % Apstrakt na srpskom jeziku (u odabranom pismu)
 \apstr{%
-Rezime placeholder
+U okviru ovog rada predstavljen je razvoj okruženja \emph{Pure} - modernog okruženja za razvoj veb aplikacija baziranog na šablonu \emph{Flux}. U narednim poglavljima nalaze se obrazloženja za odabir konkretnih alata i biblioteka tokom implementacije, primeri korišćenja okruženja za pisanje korisničkih aplikacija kao i pojašnjenje implementacionih detalja najvažnijih elemenata okruženja.
 }
 
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{veb, internet, interfejs, html, css, javaskript, razvojno okruženje}
+\kljucnereci{veb, internet, interfejs, html, css, JavaScript, TypeScript, razvojno okruženje, React, Angular, Redux, Flux, MVC}
 
 \begin{document}
 % ==============================================================================
@@ -243,7 +242,9 @@ Rezime placeholder
 % Strana sa podacima o mentoru i članovima komisije
 \komisija
 % Strana sa posvetom (u odabranom pismu)
-\posveta{Svima osim LaTex-u}
+\posveta{
+  Mojim roditeljima.
+}
 % Strana sa podacima o disertaciji na srpskom jeziku
 \apstrakt
 % Sadržaj teze
@@ -256,54 +257,58 @@ Rezime placeholder
 
 % ------------------------------------------------------------------------------
 \chapter{Uvod}
-% Poboljšanje infrstrukture Internet mreže, to jest, povećanjem brzine i stabilnosti 
-% internet komunikacije,
-% naša interakcija sa računarima danas izgleda značajno drugačije nego pre 20 godina. 
-% Umesto stonih računara sa velikim kućištima i glasnim rashladnim sistemima,
-% današnji najrasprostranjeniji računari nam staju u džep. Koristimo ih kako bi 
-% komunicirali sa bližnjima i bili u toku sa svetskim dešavanjima.
+Iako današnji mini računari, koje gotovo svi nosimo u džepu, imaju više procesorske snage 
+nego računar koji je korišćen tokom Appolo misije \cite{apollo}, 
+danas te lične računare ne koristimo za teška izračunavanja i komplikovane procedure. 
+Koristimo ih najčešće kao jednostavne terminale kako bismo pristupili internet resursima,
+to jest, podacima koji se nalaze na velikim centralizovanim računarskim sistemima. 
+Veb interfejs je tako postao glavni način naše interakcije sa računarom i internetom.
 
-% Iako današnji mini računar koji gotovo svi nosimo u džepu ima više procesorske moći 
-% nego računar koji je korišćen tokom Appolo misije(ref), 
-% danas te lične računare ne koristimo za teška izračunavanja i komplikovane procedure. 
-% Koristimo ih najčešće kao terminale kako bismo pristupili internet resursima,
-% to jest, podacima koji se nalaze na velikim centralizovanim računarskim sistemima. 
-% Veb interfejs je tako postao glavni način naše interakcije sa računarom i internetom.
+Posledica toga je značajna promena fokusa u svetu razvoja aplikativnog softvera.
+Ukoliko pogledamo rezultat upitnika kompanije \emph{"Stack Overflow"}
+o najkorišćenijim programerskim alatima, videćemo da prva dva mesta na listi
+zauzimaju upravo veb tehnologije (Na prvom mestu je JavaScript sa 69.7\%, dok je na 
+drugom HTML/CSS sa 62.4\%) \cite{StackOverflowSurvey}.
 
-% Posledica toga je značajna promena fokusa u svetu razvoja aplikativnog softvera.
-% Ukoliko pogledamo rezultat upitnika kompanije "Stack Overflow" 
-% (ref)({\url{https://insights.stackoverflow.com/survey/2020#technology-programming-scripting-and-markup-languages-professional-developers}})
-% o najkorišćenijim programerskim alatima, videćemo da prva dva mesta na listi
-% zauzimaju upravo veb tehnologije (Na prvom mestu je JavaScript sa 69.7\%, dok je na 
-% drugom HTML/CSS sa 62.4\%).
+Kako potreba za novim softverom daleko prevazilazi mogućnost softverskih inženjera 
+da taj softver isporuče, biblioteke i okruženja koja pomažu pri razvoju softvera 
+postali su veoma važan deo inženjerskog alata.
+U domenu razvoja veb aplikacija, na tržištu se izdvajaju tri razvojna okruženja. 
+Ova tri razvojna okruženja najviše se međusobno razlikuju po pristupu u promeni 
+stanja aplikacije i razumevanju
+toga šta je centralni deo dizajna (u funkcionalnom smislu) jedne veb aplikacije.
 
-% Kako potreba za novim softverom daleko prevazilazi mogućnost softverskih inženjera 
-% da taj softver isporuče, biblioteke i okruženja koja pomažu pri razvoju softvera 
-% postali su veoma važan deo inženjerskog alata.
-% U domenu razvoja veb aplikacija, na tržištu se izdvajaju tri razvojna okruženja. 
-% Ova tri razvojna okruženja najviše se međusobno razlikuju po pristupu u promeni 
-% stanja aplikacije i razumevanju
-% toga šta je centralni deo dizajna (u funkcionalnom smislu) jedne veb aplikacije.
+Kada posmatramo ova popularna razvojna okruženja, uočavamo dva bitno različita 
+pristupa u arhitekturi:
+\begin{enumerate}
+  \item Šablon \emph{Model-Pogled-Upravljač} u kom aplikacija predstavlja skup
+   povezanih komponenti organizovanih u hijerarhisku strukturu, kojima je 
+   pridruženo stanje i ponašanje.
+  \item Šablon \emph{Flux} u kom se aplikacija posmatra kao mašina stanja čija je 
+  vizuelna reprezentacija samo rezultat trenutnog stanja.
+\end{enumerate}
 
-% Kada posmatramo ova popularna razvojna okruženja, uočavamo dva bitno različita 
-% pristupa u arhitekturi:
-% \begin{enumerate}
-%   \item {\emph{Model-Pogled-Upravljač}} šablon u kom aplikacija predstavlja skup
-%    povezanih komponenti organizovanih u hijerarhisku strukturu, kojima je 
-%    pridruženo stanje i ponašanje
-%   \item Flux šablon u kom se aplikacija posmatra kao mašina stanja čija je 
-%   vizuelna reprezentacija samo rezultat trenutnog stanja.
-% \end{enumerate}
+Prvi pristup je prisutan u okruženju \emph{Angular}, drugi je dominantan u biblioteci 
+\emph{React}, dok okruženje \emph{Vue.js} zastupa dizajn koji predstavlja kompromis izmеđu ova dva pristupa.
+\section{Organizacija rada}
+Kroz ovaj rad ispratićemo razvoj jednog modernog razvojnog okruženja za izradu 
+veb aplikacija. U poglavlju \ref{chap:SPA} opisaćemo arhitekturu SPA, kao najčešći arhitekturalni šablon korišćen pri
+izradi veb aplikacija. Zatim ćemo se u poglavlju \ref{chap:problemi} osvrnuti na najčešće
+arhitekturalne šablone klijentskih aplikacija kroz analizu problema najpopularnijih okruženja.
+Nakon toga, u poglavlju \ref{chap:pure-okruzenje}, upoznaćemo se sa novorazvijenim okruženjem za razvoj SPA aplikacija iz perspektive korisnika (inženjera).
+U poglavlju \ref{chap:pure-implementacija}
+opisaćemo postavljene zahteve koje novo okruženje mora da ispuni,
+kao i detalje implementacije samog okruženja.
+U poglavlju \ref{chap:diskusija} ćemo dati objašenje na koji način su ispunjeni zahtevi postavljeni u poglavlju \ref{chap:pure-implementacija},
+i analizirati novorazvijeno rešenje iz perspektive budućih proširenja i unapređenja.
 
-% Prvi pristup je prisutan u okruženju Angular, drugi je dominantan u biblioteci 
-% React, dok Vue.js zastupa dizajn koji predstavlja kompromis izmеđu ova dva pristupa.
 
-% Kroz ovaj rad ispratićemo razvoj jednog modernog razvojnog okruženja za izradu 
-% SPA veb aplikacija.
+
+
 
 
 % ------------------------------------------------------------------------------
-\chapter{Arhitektura SPA}
+\chapter{Arhitektura SPA}\label{chap:SPA}
 Poboljšanjem infrastrukture Interneta i napredovanjem tehnologije i mogućnosti
 ličnih računara
 i mobilnih uređaja, prezentaciona logika korisničkih aplikacija se postepeno
@@ -497,7 +502,7 @@ Ovo dovodi do velike heterogenosti u pristupu pisanja koda i zbog toga nema jedi
 koji se javljaju pri razvoju aplikacija. Ovo je upravo razlog zbog kojeg je \emph{Angular} u velikim korporacijskim okruženjima i timovima
 i dalje dominantan izbor.
 % ------------------------------------------------------------------------------
-\chapter{Okruženje Pure}
+\chapter{Okruženje Pure}\label{chap:pure-okruzenje}
 U ovom poglavlju upoznaćemo se detaljnije sa novim okruženjem, dati obrazloženje
 za odabir njegovog naziva i pogledati par jednostavnih primera aplikacija napisanih u okruženju \emph{Pure}.
 Krenućemo od najjednostavnijeg
@@ -553,7 +558,8 @@ da sadrži fajlove prikazane na slici \ref{fig:hello-world-direktorijum}.
   \caption{Struktura direktorijuma nakon izvršenja komande \ref{cmd:npx}}
   \label{fig:hello-world-direktorijum}
 \end{figure}
-Kako bismo pokrenuli našu aplikaciju, potrebno je da se pozicioniramo u 
+\pagebreak
+\noindent Kako bismo pokrenuli našu aplikaciju, potrebno je da se pozicioniramo u 
 novonapravljeni direktorijum i instaliramo neophodne \emph{npm}-pakete,
 izvršavanjem komande:
 \shellcmd{cd hello-world \&\& npm install}{cmd:npm-install-hello-world}
@@ -573,7 +579,7 @@ Built in 27ms
 \end{lstlisting}
 \renewcommand\lstlistingname{Primer koda}
 
-Ukoliko u pretraživaču otvorimo stranicu \url{http://localhost:1234},
+\noindent Ukoliko u pretraživaču otvorimo stranicu \url{http://localhost:1234},
 trebalo bi da vidimo stranicu koja izgleda kao na slici \ref{fig:hello-world} 
 
 \begin{figure}[!ht]
@@ -590,7 +596,7 @@ trebalo bi da vidimo stranicu koja izgleda kao na slici \ref{fig:hello-world}
 % U narednim poglavljima upoznaćemo se detaljnije sa svrhom ovih fajlova, ali ćemo
 % te detalje za sada preskočiti.
 
-Fajl koji sadrži centralnu logiku naše aplikacije je \code{src/App.ts} (Primer \ref{file:app.ts}).
+\noindent Fajl koji sadrži centralnu logiku naše aplikacije je \code{src/App.ts} (Primer \ref{file:app.ts}).
 \begin{lstlisting}[style=jsStyle, caption={Sadržaj fajla \code{App.ts}},label=file:app.ts]
 import { Component, componentFactory } from "pure-framework/core";
 import { div, span } from "pure-framework/html";
@@ -609,7 +615,6 @@ export const app = componentFactory(AppComponent);
 \noindent
 Ukoliko pogledamo aplikaciju u pretraživaču (slika \ref{fig:hello-world})
 videćemo da struktura HTML elemenata odgovara strukturi koju vraća funkcija \code{template()}.
-
 Recimo da želimo da odredimo ponašanje našoj aplikaciji, tako da svaki put kada
 kliknemo na element div povećamo broj iz pozdravne poruke za jedan, a ime promenimo u "Ford".
 To možemo da uradimo tako što ćemo izmeniti funkciju \code{template()} na sledeći način:
@@ -862,12 +867,12 @@ export interface ToDoState {
 }
 \end{lstlisting}
 
-\chapter{Implementacija okruženja Pure}
-U ovom ćemo razmotriti najpre zahteve koje treba da ispuni novo okruženje,
+\chapter{Implementacija okruženja Pure}\label{chap:pure-implementacija}
+U ovom poglavlju ćemo razmotriti najpre zahteve koje treba da ispuni novo okruženje,
 a zatim ćemo se upustiti i u detalje implementacije okruženja \emph{Pure} i
 pojasniti neke odluke donete tokom dizajniranja samog okruženja.
 
-\section{Zahtevi}
+\section{Zahtevi}\label{sec:zahtevi}
 Pre upuštanja u detalje implementacije, razmotrimo zahteve
 koje bi jedno novo razvojno okruženje trebalo da ispuni na
 osnovu do sada iznetih problema.
@@ -878,27 +883,29 @@ osnovu do sada iznetih problema.
   novo okruženje ne sme da uvodi novi, niti koristi bilo kakav postojeći
   specijalizovani jezik za opisivanje strukture HTML-a. Dodatni zahtev u pogledu
   opisa HTML-strukture komponenenata je mogućnost debagovanja
-  logike i strukture izgleda komponente.
+  logike i strukture izgleda komponente. \label{zahtev:1}
   \item 
   Kako bi se izbegao problem sa deljenjem stanja (Odeljak \ref{subsec:upravljanje-stanjem}),
   novo okruženje treba da
   se oslanja na šablon \emph{Flux} i jednosmeran tok podataka.
   Stanje mora biti centralizovano, a interfejs za upravljanje stanjem
   mora biti robustan i konzistentan među komponentama.
+  \label{zahtev:2}
  \item Kako bi što manje grešaka došlo do korisnika, potrebno je uočiti
  što više grešaka koje je moguće uočiti u fazi razvoja.
+ \label{zahtev:3}
  \item Distribucija razvojnog okruženja \emph{Pure} mora biti dostupna kroz
- javni repozitorijum \emph{npm}-paketa.
+ javni repozitorijum \emph{npm}-paketa. \label{zahtev:4}
  \item Okruženje \emph{Pure} mora biti otvoreno za modifikaciju. Kako u smislu prilagođavanja okruženja konkretnom projektu,
-tako i u smislu predloga za modifikaciju samog okruženja kroz \emph{zajednicu otvorenog koda} (eng. \emph{Open Source community}.).
- \item Komponente okruženja \emph{Pure} moraju imati jednostavnu i lako čitljivu strukturu. 
+tako i u smislu predloga za modifikaciju samog okruženja kroz \emph{zajednicu otvorenog koda} (eng. \emph{Open Source community}.). \label{zahtev:5}
+ \item Komponente okruženja \emph{Pure} moraju imati jednostavnu i lako čitljivu strukturu. \label{zahtev:6}
 \end{enumerate}
 
 \section{Dizajn okruženja Pure}
 Okruženje Pure preuzima šablon \emph{Flux} od biblioteke \emph{React}, ali inspiraciju za konretnu implementaciju ovog šablona
-preuzima od biblioteke \emph{NgRx} koja je deo \emph{Angular}-ekosistema. Od okruženja \emph{Angular}
+preuzima od biblioteke \emph{NgRx} koja je deo \emph{Angular}-ekosistema \cite{NgRx}. Od okruženja \emph{Angular}
 takođe preuzima pristup razvoju koji podrazumeva pisanje komponenti u jeziku \emph{TypeScript} umesto jezika \emph{JavaScript}.
-\subsection{Zašto ne HTML?}
+\subsection{Zašto ne HTML?} \label{subsec:zasto-ne-html}
 Iako je HTML oproban alat za opisivanje strukture dokumenta, on ima svoja ograničenja koja nije tako lako prevazići.
 Programi za obradu teksta pri pisanju HTML fajla uglavnom teško mogu da zaključe kontekst povezivanja
 pojedinačnih HTML-elemenata sa konkretnim funkcijama i promenljivima napisanim u \emph{JavaScript}-u i zbog toga je podrška alata,
@@ -951,7 +958,7 @@ fajla \code{index.html} direktno da zahtevamo \emph{TypeScript} fajl (Primer \re
 Deo je većeg skupa alata otvorenog koda pod nazivom \emph{ReactiveX} koji služe reaktivnom programiranju \cite{ReactiveX}.
 
 Reaktivno programiranje podrazumeva programiranje vođeno događajima. Popularna implementacija šablona \emph{Redux} koja se koristi za \emph{Angular} aplikacije
-pod nazivom \emph{NgRx} je implementirana upravo nad ovom bibliotekom \cite{NgRx}. Okruženje \emph{Pure} koristi
+pod nazivom \emph{NgRx} je implementirana upravo nad ovom bibliotekom \cite{Redux} \cite{NgRx}. Okruženje \emph{Pure} koristi
 biblioteku \emph{RxJs} iz istih razloga, ali u značajno pojednostavljenoj varijanti.
 \subsection{Ostali alati i biblioteke}
 Pored glavnih alata opisanih u ovom poglavlju, korišćeni su i alati otvorenog koda za manje i jednostavnije zadatke.
@@ -999,7 +1006,7 @@ koji odgovara tipu korenog modela podataka, i tri standardna argumenta. Standard
 \end{enumerate}
 Ovi argumenti su već opisani u sekciji \ref{subsec:mesto-povezivanja}, pa njihovo značenje nećemo ovde ponovo navoditi.
 
-Ukoliko bliže analiziramo prikazani kod, primetićemo da funkcija \code{bootstrap()} ima 3 zaduženja.
+Ukoliko bliže analiziramo prikazani kod, primetićemo da funkcija \code{bootstrap()} ima 3 zaduženja:
 \begin{enumerate}
   \item Instanciranje korene komponente pozivom prosleđene \emph{factory}\footnote{\emph{Factory} - eng. Fabrika. U ovom konteksu "šablon Fabrika" \cite{GoF}.}-funkcije (Linja 10) \cite{GoF}.
   \item Osluškivanje promene stanja skladišta (Linija 11).
@@ -1042,7 +1049,7 @@ Interfejs \code{FunctionalElement} deklariše sledeće metode i polja:
 Važno je napomenuti da \emph{TypeScript} interfejsi mogu definisati i polja, a ne samo metode\footnote{Pošto direktno pristupanje poljima instance nije redak slučaj u \emph{JavaScript}-u, inženjeri
 \emph{TypeScript}-a su odlučili da zvanično tako nešto podrže i u svojoj sintaksi.}.
 \subsection{Ugrađeni Funkcionalni Elementi}
-Kako bismo izgradili nove komponente koristeći šablon Kompozicije (eng. \emph{Composite pattern}),
+Kako bismo izgradili nove komponente koristeći šablon kompozicije (eng. \emph{Composite pattern}),
 moramo se osloniti na neke postojeće, to jest, elemente ugrađene u okruženje.
 Elementi koji su ugrađeni u okruženje \emph{Pure} su elementi koji predstavljaju pandan postojećim HTML elementima
 (\code{div}, \code{h1}, \code{span}, ...).
@@ -1256,7 +1263,7 @@ obe klase implementiraju interfejs \code{EventListening} i sadrže instancu klas
 (\code{EventListeningBehaviour}). Razlog za ovo je potreba za razdvajanjem interfejsa (eng. \emph{Interface Segregation})
 i lakšim razvojem koda kroz princip \emph{"kompozicija ispred nasleđivanja"} (eng. \emph{Composition over Inheritance}).
 
-Koriščenjem (pojednostavljenog) šablona \emph{Dekorator} razdvajamo implementaciju za osluškivanje i
+Koriščenjem (pojednostavljenog) šablona \emph{dekorator} \cite{GoF} razdvajamo implementaciju za osluškivanje i
 reagovanje na korisničke događaje.
 
 Pogledajmo detalje ovog interfejsa, kao i konkretnu implementaciju (ista implementacija interfejsa se koristi i za \code{HTMLFunctionalElement} i za \code{Component<Model>}).
@@ -1399,7 +1406,7 @@ Funkcija \code{componentFactory()} je funkcija višeg reda. To znači da je povr
 Vraćena funkcija ima potpis koji prihvata dva argumenta:
 \begin{enumerate}
   \item Funkciju za izračunavanje trenutnog stanja (\code{state: () => ModelType}).
-  \item Opcioni identifikator komponente (\code{id?: number | string})
+  \item Opcioni identifikator komponente (\code{id?: number | string}).
 \end{enumerate}
 U liniji 5 primera \ref{file:core:componentFactory.ts} vidimo inicijalizaciju jednog rečnika (praznog objekta).
 Ovaj rečnik služi kao keš mehanizam za korisnički definisane komponente. Taj mehanizam funkcioniše na sledeći način:
@@ -1413,9 +1420,104 @@ Ovaj rečnik služi kao keš mehanizam za korisnički definisane komponente. Taj
 
 Opcioni identifikator komponente (\code{id}) služi za (retke) slučajeve kada dve iste komponente koristimo
 na dva različita mesta u aplikaciji sa potpuno istim stanjem. U slučaju nedodavanja ovog identifikatora, ovaj mehanizam bi napravio samo jednu instancu komponenente umesto dve koliko je potrebno.
-\chapter{Diskusija}
-\chapter{Zaključak}
+\chapter{Diskusija}\label{chap:diskusija}
+Okruženje \emph{Pure} ima za cilj da adresira neke od problema koji
+su prisutni u popularnim okruženjima za razvoj klijentskih veb aplikacija. Kao takavo, više predstavlja dokaz koncepta (eng. \emph{Proof of Concept}), nego rešenje spremno za komercijalnu upotrebu.
+U ovom poglavlju ćemo analizirati ispunjenost postavljenih zahteva i razmotriti moguća poboljšanja datog rešenja.
+\section{Analiza ispunjenosti zahteva}
+\noindent Osvrnimo se još jednom na listu zahteva iznetu u sekciji \ref{sec:zahtevi}:
 
+Zahtev \ref{zahtev:1}, koji se odnosi na (ne)korišćenje
+specijalizovanih sintaksi koje se prevode na HTML, ispunjen je
+korišćenjem koncepta funkcionalnih elemenata. Umesto opisa HTML
+strukture korisnik pozivom funkcija (fabričkih konstruktora
+funkcionalnih elemenata) opisuje strukturu DOM-drveta i na taj način
+koristi sve benefite statičke provere ispravnosti, sintaksnog
+obeležavanja, lakog refaktorisanja i svega ostalog što jedan moderan
+programski jezik podrazumevano donosi.
+
+Zahtev \ref{zahtev:2}, koji se odnosi na implementaciju šablona
+\emph{Flux} ispunjen je implementacijom \code{Store<Model>}
+mehanizma za skladištenje podataka. Podaci se (podrazumevano) kreću
+u jednom smeru kroz aplikaciju koristeći šablon \emph{Posmatrač}
+implementiran u biblioteciji \emph{RxJs}.
+
+Zahtev \ref{zahtev:3}, koji se odnosi na uočavanje grešaka u fazi razvoja ostvaren je statičkim tipovima i korišćenjem jezika \emph{TypeScript}.
+
+Objavljivanjem paketa u javni \emph{npm}-registar, ispunjen je i zahtev \ref{zahtev:4}.
+
+Zahtev \ref{zahtev:5}, koji se odnosi na otvorenost za modifikaciju,
+ostvaren je objavljivanjem repozitorijuma pod licencom MIT \cite{MIT}.
+
+Zahtev \ref{zahtev:6}, koji se odnosi na lako čitljivu strukturu
+ostvaren je minimalnim kodom neophodnim za funkcionisanje
+aplikacije, na sličan način na koji je to rešeno i u okruženju
+\emph{React}. Jedina obavezna metoda u okviru implementacije jedne
+komponente je metoda \code{template()}, koja definiše HTML
+strukturu komponente. Sve ostale metode su opcione, pa korisnik ima
+široku kontrolu nad organizacijom svog koda.
+
+\section{Prostor za unapređenja}
+Okruženje \emph{Pure} razvijeno u okviru ovog rada predstavlja
+osnovu jednog kompletnijeg i robustnijeg okruženja, koje će
+moći da se razvije na temeljima trenutnog rešenja. Kao potencijalna
+poboljšanja trenutnog rešenja, autor ovog rada vidi u unapređenju
+strukture koda, dodavanju funkcionalnosti i podeli rešenja na manje
+funkcionalne celine. U ovoj sekciji ćemo prodiskutovati neke od tih
+ideja.
+\subsection{Struktura koda}
+Kako bi trenutno rešenje moglo dalje da se razvija i napreduje u
+okviru zajednice otvorenog koda, neophodno je najpre detaljno
+dokumentovati i opisati različite modele upotrebe trenutno
+postojećeg rešenja. Jedan deo tog posla sastoji se od dodavanja
+\emph{JSDoc} komentara na sve javne metode koje se pozivaju iz
+korisničkog okruženja u okviru razvoja jedne
+\emph{Pure}-aplikacije \cite{JSDoc}. Drugi deo odnosi se na refaktorisanje
+trenutnog rešenja i prelazak sa modela nasleđivanja na model
+kompozicije klasa i ekstenzjiju specifičnih ograničenja za ugrađene
+funkcionalne elemente, kako bi iskustvo pisanja koda bilo što lakše,
+a potencijalne greške lako uočljive.
+
+\subsection{Detaljnije automatsko testiranje}
+Iako su osnovni automatski testovi za proveru najvažnijih
+funkcionalnosti okruženja već napisani, oni se ne pokreću
+automatski i ciljaju veoma uzan skup funkcionalnosti. Ovaj skup
+testova bi trebalo proširiti i uvesti princip kontinualne
+integracije i kontinualnog isporučivanje u proces.
+
+\subsection{Proširenje šablona Flux na šablon CQRS}
+Šablon Flux implementiran u okruženju \emph{Pure} predstavlja jednu
+pojednostavljenu verziju bez okidanja akcija i funkcije
+\emph{skupljača}. Umesto jedne centralizovane funkcije skupljača,
+okruženje \emph{Pure} ostavlja odgovornost nenarušavanja
+konzistentnosti skladišta programerima.
+
+Ovaj mehanizam može da se proširi do šablona CQRS\footnote{CQRS - Command Query Responsibility Segregation \cite{CQRS}} \cite{CQRS} koji bi povećao
+kompleksnost aplikacija sa jedne strane, ali bi omogućio lakše
+skaliranje aplikacije u smislu kompleksnosti programskog koda.
+
+Šablon CQRS ima za cilj da u potpunosti odvoji kod koji utiče na
+promenu stanja skladišta i koda koji samo čita trenutno stanje.
+Specifičan je u odnosu na šablon \emph{Flux} po tome što padrazumeva i čuvanje redosleda i detalja izvršenih komandi koje menjaju stanja što omogućava repliciranje svakog stanja aplikacije
+do kog može da se stigne od početnog. Ovaj mehanizam je veoma značajan u pronalaženju eventualnih grešaka u kodu.
+\subsection{Alat za prevođenje HTML-a na funkcionalne elemente}
+Glavnu prepreku za korišćenje novog okruženja u odnosu na postojeće je korišćenje \emph{TypeScript} sintakse umesto HTML-a. Iako ovo ima svojih prednosti koje su već opisane u odeljku \ref{subsec:zasto-ne-html}, postoji veliki broj postojećih komponenti
+napisanih u HTML-u, koje je nema razloga pisati ponovo.
+Alat koji bi prevodio HTML sintaksu u funkcionalne komponente olakšao bi korišćenje okruženja \emph{Pure} programerima koji žele da koriste postojeće komponente napisane u HTML-u.
+
+% ali i pokretanje online veb prezentacije za
+% promociju i neformalnu dokumentaciju okruženja.
+
+\chapter{Zaključak}\label{chap:zakljucak}
+
+U ovom radu predstavljen je razvoj jednog modernog okruženja za razvoj klijentskih veb aplikacija. Pored toga, data je kratka analiza problema postojećih rešenja i najčešćih arhitekturalnih obrazaca.
+
+U okviru rada nalaze se obrazloženja za odabir konkretnih alata i biblioteka, primeri korišćenja okruženja za pravljenje aplikacija kao i pojašnjenje implementacije najvažnijih elemenata okruženja.
+
+Ne postoji idealan softver i ne postoji idealno razvojno okruženje. Svaki izbor alata se uvek svodi na optimizaciju jednog skupa kvalitativnih atributa po cenu nekog drugog. Okruženje \emph{Pure} u ovom smislu nije izuzetak.
+Zbog velikog broja biblioteka i okruženja u ekosistemu \emph{JavaScript} jezika, autor ne očekuje da će se rešenje koristiti u komercijalne svrhe,
+ali se nada da će ovo rešenje, ili barem neki njegovi delovi, poslužiti kao inspiracija nekim budućim bibliotekama i okruženjima.
+Okruženje razvijeno u okviru ovog rada objavljeno je pod licencom MIT, što znači da je otvoreno za modifikaciju i korišćenje u akademske ili komercijalne svrhe.
 % % primer liste
 % Можемо правити и набрајања:
 % \begin{enumerate}
@@ -1426,7 +1528,15 @@ na dva različita mesta u aplikaciji sa potpuno istim stanjem. U slučaju nedoda
 % \end{enumerate}
 
 
-
+\chapter{Dodatak}
+Resursi na mreži koji se prilažu uz tekst rada:
+\begin{itemize}
+  \item Repozitorijum okruženja \emph{Pure}: \url{https://github.com/maleksandar/pure-framework}
+  \item Stranica \emph{npm}-paketa "pure-framework": \url{https://www.npmjs.com/package/pure-framework}
+  \item Repozitorijum aplikacije "Zdravo svete!": \url{https://github.com/maleksandar/pure-framework-hello-world-app}
+  \item Repozitorijum aplikacije "Menadžer zadataka": \url{https://github.com/maleksandar/pure-framework-todo-app}
+  \item Online verzija aplikacije "Menadžer zadataka": \url{https://pure-framework-todo-demo.netlify.app/}
+\end{itemize}
 % ------------------------------------------------------------------------------
 % Literatura
 % ------------------------------------------------------------------------------
@@ -1456,5 +1566,8 @@ na dva različita mesta u aplikaciji sa potpuno istim stanjem. U slučaju nedoda
 % реформе истичу 1818., 1836., 1839., 1847. и 1852.
 % \end{biografija}
 % ------------------------------------------------------------------------------
+
+
+
 
 \end{document} 
