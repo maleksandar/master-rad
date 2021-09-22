@@ -230,7 +230,7 @@ captionpos=b
 % Ime i afilijacija četvrtog člana komisije (opciono)
 % \komisijaD{}
 % Datum odbrane (obrisati ili iskomentarisati narednu liniju ako datum odbrane nije poznat)
-\datumodbrane{\_\_\_\_\_\_\_\_\_\_\_\_}
+\datumodbrane{27. septembar 2021.}
 
 % Apstrakt na srpskom jeziku (u odabranom pismu)
 \apstr{%
@@ -238,7 +238,7 @@ U okviru ovog rada predstavljen je razvoj okruženja \emph{Pure} - modernog okru
 }
 
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{veb, internet, interfejs, html, css, JavaScript, TypeScript, razvojno okruženje, React, Angular, Redux, Flux, MVC}
+\kljucnereci{veb, internet, interfejs, HTML, CSS, JavaScript, TypeScript, razvojno okruženje, React, Angular, Redux, Flux, MVC}
 
 \begin{document}
 % ==============================================================================
@@ -326,16 +326,20 @@ i mobilnih uređaja, prezentaciona logika korisničkih aplikacija se postepeno
 selila sa centralizovanih
 serverskih računara na klijentske uređaje. Arhitektura SPA (eng. \emph{Single Page Application}) je dovela ovaj princip
 do krajnjih granica
-prebacivanjem celokupne logike ponašanja aplikacije na klijentsku stranu \cite{SPA}. U ovoj arhitekturi klijent
+prebacivanjem celokupne logike ponašanja aplikacije na klijentsku stranu \cite{SPA}.
+Iako SPA nije sama po sebi arhitektura, već samo akronim koji služi za opis osnove 
+funkcionisanja klijentske aplikacije,
+ovaj opis implicitno definiše obrazac komunikacije između servera i klijenta,
+pa posredno utiče i na sam arhitekturalni obrazac celopkupne aplikacije. U ovom arhitekturalnom obrascu klijent
 pri prvom zahtevu
-ka serveru preuzima celokupni (klijentski) aplikativni kod i obrađuje ga u
+ka serveru u osnovi preuzima celokupni (klijentski) aplikativni k\^od i obrađuje ga u
 pregledaču, dok
 svi naredni pozivi služe prostoj razmeni podataka. Ovo je značajno uticalo
 na samu metodologiju razvoja veb aplikacija.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.8\textwidth]{slike/SPA_Diagram.drawio.png}
-  \caption{Dijagram sekvence SPA arhitekture.}
+  \caption{Dijagram sekvence komunikacije u SPA aplikaciji.}
   \label{fig:SPA}
 \end{figure}\\
 Ovaj pristup omogućio je razdvajanje poslova timova zaduženih za
@@ -343,25 +347,27 @@ serversku logiku i timova zaduženih za prezentacionu logiku i vizuelni dizajn,
 a time omogućio i veći stepen njihove nezavisnosti.
 Jedina tačka spajanja ova dva tima postao je dizajn interfejsa
 između klijentske i serverske aplikacije. Rešenje ovog problema inženjeri su našli
-u arhitekturalnom obrascu REST (eng. \emph{Representational State Transfer}) \cite{REST}.
+u definisanju skupa arhitekturalnih smernica koji su nazvali REST (eng. \emph{Representational State Transfer}) \cite{REST}.
 
-Arhitekturalni obrazac REST standardizovao je način organizacije podataka
+REST je standardizovao način organizacije podataka
 i način pristupanju podacima kroz API (eng. \emph{Application Programmable Interface}). 
-Dizajniran je oko podataka (resursa), koji su organizovani po hijerarhijskom modelu
+REST daje smernice u okviru organizacije podataka (resursa). Po REST-u podaci bi trebalo da budu organizivani po hijerarhijskom modelu
 strukture fajl-sistema.
+\pagebreak
 
-Odvajanjem razvoja klijentskih i serverskih aplikacija, pisanje složenih korisničkih aplikacije postalo je značajno lakše.
+\noindent
+Odvajanjem razvoja klijentskih i serverskih aplikacija, pisanje složenih korisničkih aplikacija postalo je značajno lakše.
 Povećavanjem složenosti razvoja ovih aplikacija,
 razvila se potreba za razvojnim obrascima i razvojnim okruženjima koja omogućavaju
-programerima da lakše organizuju svoj kod i da lakše njime upravljaju.
+programerima da lakše organizuju svoj k\^od i da lakše njime upravljaju.
 Prvi obrazaci koji su se koristili preuzeti su iz arhitekture višestraničnih aplikacija.
 Primer jednog takvog obrasca je \emph{Model-Pogled-Upravljač} (eng. \emph{Model-View-Controller}) \cite{MVC}. 
 
 \section{Obrazac Model-Pogled-Upravljač}
 
-Obrazac \emph{Model-Pogled-Upravljač} nastao je pre pojave arhitekture SPA.
+Obrazac \emph{Model-Pogled-Upravljač} nastao je pre pojave SPA.
 Koristio se za velike sajtove i aplikacije, ali na takav način da su sve komponente pisane
-kao serverski kod. Ideja obrasca \emph{Model-Pogled-Upravljač} je da omogući razdvajanje odgovornosti
+kao serverski k\^od. Ideja obrasca \emph{Model-Pogled-Upravljač} je da omogući razdvajanje odgovornosti
 između logike podataka, aplikativne logike i vizuelne reprezentacije programa.
 \begin{figure}[!ht]
   \centering
@@ -381,6 +387,7 @@ koja koriste ovaj obrazac je \emph{Angular} \cite{Angular}.
 \section{Obrazac Flux}
 Obrazac \emph{Flux} je nastao u kompaniji \emph{Facebook}, iz potrebe inženjera da otklone probleme sa 
 deljenjem stanja između različitih komponenti i čestim nadmetanjem za resurse (eng. \emph{race condition}) \cite{raceCondition}.
+Baziran je na ustaljenim arhitekturama funckionalnog i reaktivnog programiranja.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.7\textwidth]{slike/FLUX_pattern.png}
@@ -390,8 +397,9 @@ deljenjem stanja između različitih komponenti i čestim nadmetanjem za resurse
 \\
 Osnovna ideja ovog obrasca je da podaci teku u jednom smeru, tako da se uvek može jednostavno
 utvrditi redosled akcija i na taj način sprečiti nadmetanje za resurse između različitih komponenti.
-Način na koji obrazac \emph{Flux} rešava problem sa nadmetanjem za resurse sastoji od činjenice da se \emph{JavaScript}
-kod izvršava uvek u jednoj procesorskoj niti i modelu izmene stanja u kojem su sve operacije koje menjaju stanje atomične\footnote{Atomično - Nedeljiva celina. Atomična operacija se izvršava po principu "sve ili ništa".}.
+U оbrscu \emph{Flux} se izmene stanja u modelu izvršavaju
+atomično\footnote{Atomično - Nedeljiva celina. Atomična operacija se izvršava po principu "sve ili ništa".}
+na glavnoj niti, pa nema nadmetanja za resursima.
 
 \emph{Pogled}, kao i kod obrasca \emph{Model-Pogled-Upravljač}, služi za opis vizualne reprezentacije programa.
 \emph{Pogled} utiče na tok podataka tako što pri korisničkom događaju odabire \emph{akciju} koju će da emituje
@@ -419,7 +427,7 @@ upravljati i pristupati podacima u \emph{kom trenutku}. Biblioteka \emph{React} 
 % ------------------------------------------------------------------------------
 % ------------------------------------------------------------------------------
 
-\section{Problemi sa okruženjem Angular}
+\section{Problemi sa okruženjem Angular}\label{problemi:ang}
 Okruženje \emph{Angular} popularno je među programerima koji razvijaju softver za korporativne korisnike.
 Razvojni timovi koji rade na razvoju ovakvog softvera često broje preko 20 inženjera i testera.
 Obrazac \emph{Model-Pogled-Upravljač} koji prestavlja osnovni arhitekturalni dizajn okruženja Angular,
@@ -440,7 +448,7 @@ Pogledajmo jedan primer koda sa sajta \url{https://angular.io/}:
 \begin{lstlisting}[style=htmlStyle, caption={Primer koda u \emph{Angular}-u},label=angular:code]
 <div *ngFor="let item of items">{{item.name}}</div>
 \end{lstlisting}
-Kod prikazan u primeru \ref{angular:code} predstavlja instrukciju za izlistavanje stavki (\code{item}) iz niza \code{items}.
+K\^od prikazan u primeru \ref{angular:code} predstavlja instrukciju za izlistavanje stavki (\code{item}) iz niza \code{items}.
 Drugim rečima, ovo nije HTML\footnote{Hyper-Text-Markup-Language.}-element, već instrukcija napisana na 
 specijalnom jeziku okruženja \emph{Angular}, namenjenom za opisivanje
 pogleda, koja će u vreme izvršavanja biti zamenjena pravim HTML-elementom. Ovaj HTML-element će dinamički promeniti svoj sadržaj
@@ -450,11 +458,11 @@ Ovo je jednostavan primer, ali nije teško zamisliti situaciju u kojoj programsk
 da bi se o njoj rezonovalo u slučaju potrage za greškom. Da stvar bude gora, ovu logiku nije moguće (jednostavno) debagovati\footnote{\emph{Debug} - eng. Traženje i uklanjanje grešaka.}
 modernim alatima ugrađenim u pregledače,
 jer logika ispisana u ovoj instukciji prolazi kroz više faza prevođenja i uglavnom je na kraju izvršava
-optimizovani i minifikovani kod samog okruženja, koji je veoma nečitljiv.
-\section{Problemi sa bibliotekom React}
+optimizovani i minifikovani k\^od samog okruženja, koji je veoma nečitljiv.
+\section{Problemi sa bibliotekom React}\label{problemi:react}
 Okruženje \emph{React} razvijeno je od strane \emph{Facebook} inženjera sa ciljem da stvore okruženje
 dizajnirano tako da obrazac \emph{Flux} bude lak za implementaciju pri razvoju aplikacija.
-Ovaj model okruženja omogućio je u velikoj meri izbegavanje problema nadmetanja za resurse, ali
+Ovaj arhitekturalni obrazac okruženja omogućio je u velikoj meri izbegavanje problema nadmetanja za resurse, ali
 su neki drugi problemi ipak ostali deo rešenja.
 \subsection{Razdvajanje odgovornosti} \label{subsec:razdvajanje-odgovornosti}
 U primerima \ref{file:react.jsx} i \ref{file:react.js} vidimo primer preuzet sa zvanične veb stranice biblioteke \emph{React}.
@@ -467,8 +475,8 @@ u biblioteci \emph{React}, struktura komponente može se opisati na istom mestu 
 Ovo često omogućava lakše rezonovanje o povezanosti vizualne strukture komponente i njenog ponašanja i predstavlja
 pristup razdvajanja odgovornosti na nivou komponenenata, a ne na nivou tehnologije. 
 
-Ovaj mehanizam se u u pozadini ostvaruje tako što React transpilira\footnote{Transpilacija - prevođenje sa jednog jezika na drugi, viši programski jezik.}
-ovaj kod na čist \emph{JavaScript} (Primer \ref{file:react.js}).
+Ovaj mehanizam se u u pozadini ostvaruje tako što React transpiluje\footnote{Transpilacija - prevođenje sa jednog jezika na drugi, viši programski jezik.}
+ovaj k\^od na čist \emph{JavaScript} (Primer \ref{file:react.js}).
 Korisnik može svoje komponente pisati i na način prikazan u primeru \ref{file:react.js}, ali je
 primer \ref{file:react.jsx} očigledno lakši za čitanje i rezumevanje strukture.
 \\
@@ -494,8 +502,8 @@ const element = React.createElement(
 \end{minipage}
 \\
 Iako je ovo veoma zgodan mehanizam, on uvodi neke neželjene posledice. Naime, jako je teško utvrditi šta je ispravan,
-a šta neispravan \emph{JSX} kod i gde su tačno granice gde počinje HTML, a zavšava se \emph{JavaScript}. To možemo uočiti i na
-primeru \ref{file:react.jsx}. Element \code{<h1>} u ovom primeru ima postavljenu vrednost atributa \code{className} na nisku \code{"greeting"}.
+a šta neispravan \emph{JSX} k\^od i gde su tačno granice gde počinje HTML, a zavšava se \emph{JavaScript}. To možemo uočiti i na
+primeru \ref{file:react.jsx}. Element \code{<h1>} u ovom primeru ima postavljenu vrednost atributa \code{className} na nisku \code{''greeting''}.
 Ovaj atribut zapravo se pri prevođenju na HTML, tumači kao \code{class}. Razlog zašto ne koristimo reč \code{class}
 u \emph{JSX} kodu je taj što je \code{class} rezervisana reč u \emph{JavaScript}-u.
 
@@ -534,7 +542,7 @@ Kako bismo imali jasnu ideju kako bi novo okruženje, koje rešava opisane probl
 trebalo da izgleda, ovde ćemo definisati formalne zahteve koje bi novo
 okruženje trebalo da ispuni.  
 \begin{enumerate}
-  \item Kako bi izbegli probleme iz predstavljenih okruženja kao što su
+  \item Kako bismo izbegli probleme iz predstavljenih okruženja kao što su
   \emph{logika u pogledu} (Odeljak \ref{subsec:logika-u-pogledu}) i
   \emph{razdvajanje odgovornosti} (Odeljak \ref{subsec:razdvajanje-odgovornosti})
   novo okruženje ne sme da uvodi novi, niti da koristi bilo kakav postojeći
@@ -564,10 +572,10 @@ biće preuzete od biblioteke \emph{NgRx} koja je deo \emph{Angular}-ekosistema \
 takođe će biti preuzet pristup razvoju koji podrazumeva pisanje komponenti u jeziku \emph{TypeScript} umesto jezika \emph{JavaScript}.
 \subsection{Zašto ne HTML?} \label{subsec:zasto-ne-html}
 Iako je HTML oproban jezik za opisivanje strukture dokumenta, on ima svoja ograničenja koja nije tako lako prevazići.
-Programi za obradu teksta pri pisanju HTML fajla uglavnom teško mogu da zaključe kontekst povezivanja
+Tekst editori pri pisanju HTML fajla uglavnom teško mogu da zaključe kontekst povezivanja
 pojedinačnih HTML-elemenata sa konkretnim funkcijama i promenljivim napisanim u \emph{JavaScript}-u i zbog toga je podrška alata,
 a samim tim i iskustvo tokom pisanja HTML koda, značajno slabije nego pri pisanju \emph{JavaScript} ili \emph{TypeScript} koda.
-Dodatna mana je u tome što je jako teško segmentirati HMTL kod u hijerarhijsku strukturu ili ga podeliti na više fajlova,
+Dodatna mana je u tome što je jako teško segmentirati HMTL k\^od u hijerarhijsku strukturu ili ga podeliti na više fajlova,
 jer u HTML-u ne postoji opcija za uključivanje potkomponenti.
 Korišćenjem \emph{TypeScript} funkcija umesto sintakse HTML-a rešavaju se ovi problemi.
 Alati za upravljanje \emph{TypeScript} kodom značajno su napredniji od alata za upravljanje HTML-om.
@@ -583,7 +591,7 @@ Drugi razlog za ime \emph{Pure} dolazi iz činjenice da okruženje koristi isklj
 za opis strukture DOM-drveta i ponašanja, pa ime \emph{Pure} možemo shvatiti i u konteksu \emph{Pure JavaScript} iliti \emph{Čist JavaScript}.
 
 \chapter{Ilustracija upotrebe okruženja Pure}\label{chap:pure-okruzenje}
-Priroda okruženja \emph{Pure} je takva da neki njegovi elementi imaju relativno visok nivo apstraktnosti,
+Priroda okruženja \emph{Pure} je takva da neki njegovi elementi imaju relativno visok nivo apstrakcije,
 pa zato mogu da budu malo teži za razumevanje ako se izlažu formalno.
 Zbog toga ćemo osnovne elemente okruženja najpre predstaviti kroz praktične primere.
 
@@ -596,10 +604,10 @@ a na samom kraju poglavlja ćemo se osvrnuti i na nešto kompleksniji primer \em
 
 \section{Preduslovi}
 Kako bismo mogli da pokrenemo \emph{Pure}-aplikaciju neophodno je da radno okruženje
-\emph{Node.js} bude instalirano na računaru \cite{Node}. Preporučena verzija u vreme pisanja ovog rada je \texttt{14.17.5}.
+\emph{Node.js} bude instalisano na računaru \cite{Node}. Preporučena verzija u vreme pisanja ovog rada je \texttt{14.17.5}.
 (LTS\footnote{\emph{Long Term Support} - eng. Dugoročna tehnička podrška.}).
-Pored okruženja Node.js, neophodno je da na računaru bude instaliran i \emph{git},
-Pored ovih neophodnih alata, preporučuje se i korišćenje modernog programa za obradu teksta
+Pored okruženja Node.js, neophodno je da na računaru bude instalisan i \emph{git},
+Pored ovih neophodnih alata, preporučuje se i korišćenje modernog tekst editora
 sa podrškom za jezik \emph{TypeScript} \cite{TypeScript}. Autor preporučuje alat otvorenog koda, razvijen od strane
 Microsoft inženjera: \emph{Visual Studio Code} \cite{vsc}.
 
@@ -607,14 +615,14 @@ Okruženje \emph{Pure} može se preuzeti preko
 \emph{npm}-sistema\footnote{ \emph{Node Package Manager} - eng. Upravljač Paketa za Node.} \cite{npm}.
 To možemo uraditi na dva načina:
 \begin{enumerate}
-  \item Instaliranjem paketa \code{pure-framework} u već postojeći \emph{npm}-modul.
+  \item Instalisanjem paketa \code{pure-framework} u već postojeći \emph{npm}-modul.
   (Konzolna komanda: \ref{cmd:npm-install})
   \item Pokretanjem skripte za pravljenje projekta \code{hello-world}, bez prethodnog
-  instaliranja \emph{npm}-paketa. (Konzolna komanda: \ref{cmd:npx})
+  instalisanja \emph{npm}-paketa. (Konzolna komanda: \ref{cmd:npx})
 \end{enumerate}
 \section{Zdravo svete!}
 Ukoliko već imamo postojeći \emph{npm}-modul na kojem radimo, možemo u okviru njega
-instalirati \code{pure-framework} коmandom:
+instalisati \code{pure-framework} коmandom:
 \shellcmd{npm install pure-framework}{cmd:npm-install}
 Ovde ćemo prikazati jednostavniji pristup u kojem krećemo sa praznim
 direktorijumom, u kom ćemo pomoću \emph{npx}-skripte napraviti početnu aplikaciju "Zdravo svete" \cite{npx}.
@@ -634,7 +642,7 @@ da sadrži fajlove prikazane na slici \ref{fig:hello-world-direktorijum}.
   \label{fig:hello-world-direktorijum}
 \end{figure}
 \noindent Kako bismo pokrenuli našu aplikaciju, potrebno je da se pozicioniramo u 
-novonapravljeni direktorijum i instaliramo neophodne \emph{npm}-pakete,
+novonapravljeni direktorijum i instališemo neophodne \emph{npm}-pakete,
 izvršavanjem komande:
 \shellcmd{cd hello-world \&\& npm install}{cmd:npm-install-hello-world}
 \pagebreak
@@ -845,7 +853,7 @@ export const store = new Store<AppModel>({
 \section{Aplikacija "Menadžer Zadataka"}
 Pogledaćemo sada malo kompleksniji primer.
 U pitanju je aplikacija za upravljanje dnevnim obavezama\footnote{\emph{eng. TO-DO} lista.}.
-Veze ka online verziji ove aplikacije kao i izvorni kod mogu se naći u dodatku (Poglavlje \ref{chap:dodatak}).
+Veze ka online verziji ove aplikacije kao i izvorni k\^od mogu se naći u dodatku (Poglavlje \ref{chap:dodatak}).
 
 \begin{figure}[!ht]
   \centering
@@ -901,7 +909,7 @@ Ukoliko pogledamo strukturu liste potomaka u metodi \code{template()} (Primer \r
 \end{enumerate}
 
 \noindent
-U primeru koda \ref{file:ToDoApp.ts} prikazan je kod funkcije koja opisuje deo aplikacije sa listom aktuelnih zadataka.
+U primeru koda \ref{file:ToDoApp.ts} prikazan je k\^od funkcije koja opisuje deo aplikacije sa listom aktuelnih zadataka.
 Funkcija \code{todoSegment()} vraća \code{UlElement} funckcionalni element (povratna vrednost \emph{factory}-funkcije \code{ul()}),
 koji odgovara HTML-elementu \code{<ul>}).
 U redu 48 vidimo poziv operatora \emph{spread (eng. raširi)} nad nizom koji se dobija kao rezultat mapiranja niza
@@ -951,7 +959,7 @@ U ovom poglavlju upustićemo se u detalje implementacije okruženja \emph{Pure} 
 objasniti neke odluke donete tokom dizajniranja samog okruženja.
 
 \section{Korišćeni alati, tehnologije i biblioteke}
-Za rešavanje većine problema opisanih u poglavlju \ref{chap:motivacija} postoje različiti alati i biblioteke. 
+Za rešavanje većine problema opisanih u odeljcima \ref{problemi:ang} i \ref{problemi:react} postoje različiti alati i biblioteke. 
 Kako bi fokus okruženja \emph{Pure} trebalo da bude na do sada nerešenim (ili nedovoljno adekvatno rešenim) problemima,
 potrebno je odabrati i uvezati ove postojeće alate na pravi način. U ovoj sekciji ćemo opisati glavne
 alate i biblioteke koje predstavljaju deo okruženja \emph{Pure}, ili su korišćene tokom razvoja okruženja.
@@ -967,7 +975,7 @@ je baziran na prototipovima \cite{PrototypeInheritance}.} niske,
 kompilator će nam izbaciti grešku i upozoriti nas da to (verovatno) nije metoda koju smo želeli da pozovemo \cite{PrototypeInheritance}.
 
 Pošto \emph{TypeScript} predstavlja suštinski samo nadskup jezika \emph{JavaScript} (korišćenje tipova je opciono),
-možemo jednostavno balansirati između korišćenja striktnih tipova i sigurnosti sa jedne strane i čitljivosti koda sa druge,
+možemo jednostavno balansirati između korišćenja striktnih tipova i sigurnosti sa jedne strane i jednostavnosti koda sa druge,
 tako da je cena uvođenja ove tehnologije u okruženje veoma niska, a dobici mogu biti značajni.
 \subsection{Parcel}
 \emph{Parcel} je popularan upakivač (eng. \emph{bundler}) za veb aplikacije.
@@ -983,19 +991,19 @@ prevode se na semantičke ekvivalente iz starije verzije \emph{ECMAScript}-a.
 
 Glavna prednost upakivača \emph{Parcel} je u minimalnoj neophodnoj konfiguraciji.
 Konkretan razlog zbog kog je \emph{Parcel} odabran kao upakivač, je taj što \emph{Parcel} automatski
-prevodi \emph{TypeScript} kod na \emph{JavaScript} bez ikakvog dodatnog podešavanja, pa zbog toga možemo u okviru
+prevodi \emph{TypeScript} k\^od na \emph{JavaScript} bez ikakvog dodatnog podešavanja, pa zbog toga možemo u okviru
 fajla \code{index.html} neposredno da zahtevamo \emph{TypeScript} fajl (Primer \ref{file:html-Typescript}).
 \begin{lstlisting}[style=htmlStyle,numberstyle=\tiny, caption={Uključivanje \emph{TypeScript} fajla neposredno u \code{index.html}}, label=file:html-Typescript]
 <script src="index.ts" type="module"></script>
 \end{lstlisting}
-U ovom konkretnom primeru (Primer \ref{file:html-Typescript}), \emph{Parcel} će u pozadini prevesti \emph{TypeScript} kod na \emph{JavaScript}
+U ovom konkretnom primeru (Primer \ref{file:html-Typescript}), \emph{Parcel} će u pozadini prevesti \emph{TypeScript} k\^od na \emph{JavaScript}
 i zameniti referencu ka \emph{TypeScript}-fajlu minifikovanim rezultujućim \emph{JavaScript}-fajlom u momentu upakivanja koda.
 \subsection{RxJs}
-\emph{RxJs} je biblioteka koja sadrži generičku implementaciju obrazca \emph{Observer}\footnote{\emph{Observer} - eng. Posmatrač.} za \emph{JavaScript} \cite{GoF} \cite{RxJs}.
+\emph{RxJs} je biblioteka koja sadrži generičku implementaciju obrazca \emph{Observer}\footnote{\emph{Observer} - eng. Posmatrač.} za \emph{JavaScript} \cite{GoF,RxJs}.
 Deo je većeg skupa alata otvorenog koda pod nazivom \emph{ReactiveX} koji služe reaktivnom programiranju \cite{ReactiveX}.
 
 Reaktivno programiranje podrazumeva programiranje vođeno događajima. Popularna implementacija obrasca \emph{Redux} koja se koristi za \emph{Angular} aplikacije
-pod nazivom \emph{NgRx} je implementirana upravo nad ovom bibliotekom \cite{Redux} \cite{NgRx}. Okruženje \emph{Pure} koristi
+pod nazivom \emph{NgRx} je implementirana upravo nad ovom bibliotekom \cite{Redux,NgRx}. Okruženje \emph{Pure} koristi
 biblioteku \emph{RxJs} iz istih razloga, ali u značajno pojednostavljenoj varijanti.
 \subsection{Ostali alati i biblioteke}
 Pored glavnih alata opisanih u ovom poglavlju, korišćeni su i alati otvorenog koda za manje i jednostavnije zadatke.
@@ -1043,14 +1051,14 @@ export function bootstrap<AppModel>(
     return appRoot;
 }
 \end{lstlisting}
-Ukoliko bliže analiziramo prikazani kod, primetićemo da funkcija \code{bootstrap()} ima 3 zaduženja:
+Ukoliko bliže analiziramo prikazani k\^od, primetićemo da funkcija \code{bootstrap()} ima 3 zaduženja:
 \begin{enumerate}
   \item Instanciranje korene komponente pozivom prosleđene \emph{factory}\footnote{\emph{Factory} - eng. Fabrika. U ovom konteksu "obrazac Fabrika" \cite{GoF}.}-funkcije (Linja 10) \cite{GoF}.
   \item Osluškivanje promene stanja skladišta (Linija 11).
   \item Registrovanje anonimne funkcije za ponovno iscrtavanje elemenata DOM-a (Linije 11-16).
 \end{enumerate}
 Iako će pojedinačni detalji komponenata, fabrike komponenata, skladišta i obrade događaja biti objašnjeni u kasnijim poglavljima,
-ovde ćemo navesti neke važnije aspekte ovih elemenata, kako bismo jasnije razumeli prikazani kod. 
+ovde ćemo navesti neke važnije aspekte ovih elemenata, kako bismo jasnije razumeli prikazani k\^od. 
 
 Primetimo da drugi argument koji prihvata funkcija \code{bootsrap()},
 u samom kodu nazivamo \code{rootComponentFactory}. Razlog je u tome što prosleđena funkcija nije 
@@ -1107,7 +1115,7 @@ Implementacija ostalih funkcionalnih elemenata može se naći na repozitorijumu 
 \noindent
 Na osnovu dijagrama (slika \ref{fig:dijagram-klasa-HTMLFunctionalElement}) vidimo da \code{DivElement} nasleđuje
 klasu \\\code{HTMLFunctionalElement}.
-Ukoliko pogledamo kod klase \code{DivElement} (Primer \ref{file:html:blockElements:divElement.ts}) primetićemo da klasa \code{DivElement}
+Ukoliko pogledamo k\^od klase \code{DivElement} (Primer \ref{file:html:blockElements:divElement.ts}) primetićemo da klasa \code{DivElement}
 ne dodaje nikakvo ponašanje u odnosu na klasu \code{HTMLFunctionalElement}, osim što fiksira argument imena elementa (\code{\_tag}).
 
 \begin{lstlisting}[style=jsStyle, escapeinside=\#\#, caption={Fajl \code{html/block/elements/divElement.ts}},label=file:html:blockElements:divElement.ts]
@@ -1354,7 +1362,7 @@ Na taj način činimo strukturu koda prilagodljivom budućim promenama u hijerar
 Klasa \code{EventListeningBehaviour} ima za cilj da dekoriše funkcionalni element
 metodama \code{on()} i \code{attachEventHandlers()}.
 \section{Promena stanja}\label{sec:promena-stanja}
-Pogledajmo sada malo detaljnije kako \emph{Pure}-aplikacija implementira mehanizam skladišta, analizirajući kod iz primera \ref{file:core:store.ts}:
+Pogledajmo sada malo detaljnije kako \emph{Pure}-aplikacija implementira mehanizam skladišta, analizirajući k\^od iz primera \ref{file:core:store.ts}:
 \begin{lstlisting}[style=jsStyle, escapeinside=\#\#, caption={Fajl \code{core/store.ts}},label=file:core:store.ts]
 import { BehaviorSubject } from "rxjs";
 
@@ -1391,7 +1399,7 @@ behaviorSubject.subscribe(newState => { /* handling new state */});
 behaviorSubject.next({...oldState, changedProperty: 'new value'});
 \end{lstlisting}
 Ovaj mehanizam omogućava nam implementaciju centralizovanog sistema za skladištenje podataka.
-Ako pogledamo kod konkretne implementacije skladišta \ref{file:core:store.ts}, videćemo da klasa ima jednu javnu metodu i dva javna svojstva:
+Ako pogledamo k\^od konkretne implementacije skladišta \ref{file:core:store.ts}, videćemo da klasa ima jednu javnu metodu i dva javna svojstva:
 \begin{enumerate}
   \item Svojstvo nad kojim vršimo registraciju osluškivača (\code{state\$});
   \item Svojstvo za vraćanje trenutnog stanja (\code{get state()}) i
@@ -1472,8 +1480,8 @@ programski jezik podrazumevano donosi.
 Napomenimo da uvođenje koncepta funkcionalnih elemenata pored pomenutih
 benefita donosi i dodatnu kompleksnost. Kada programer
 želi da iskoristi neki već postojeći HTML segment iz druge stranice,
-kod napisan u HTML-u mora biti preveden
-na funkcionalne elemente, iliti na \emph{TypeScript} kod,
+k\^od napisan u HTML-u mora biti preveden
+na funkcionalne elemente, iliti na \emph{TypeScript} k\^od,
 kako bi taj segment mogao biti iskorišćen.
 
 Zahtev \ref{zahtev:2}, koji se odnosi na implementaciju obrasca
@@ -1548,7 +1556,7 @@ Ovaj mehanizam može da se proširi do obrasca CQRS\footnote{CQRS - Command Quer
 kompleksnost aplikacija sa jedne strane, ali bi omogućio lakše
 skaliranje aplikacije u smislu kompleksnosti programskog koda.
 
-Obrazac CQRS ima za cilj da u potpunosti odvoji kod koji utiče na
+Obrazac CQRS ima za cilj da u potpunosti odvoji k\^od koji utiče na
 promenu stanja skladišta i koda koji samo čita trenutno stanje.
 Specifičan je u odnosu na obrazac \emph{Flux} po tome što padrazumeva i čuvanje redosleda i detalja izvršenih komandi koje menjaju stanja što omogućava repliciranje svakog stanja aplikacije
 do kog može da se stigne od početnog. Ovaj mehanizam je veoma značajan u pronalaženju eventualnih grešaka u kodu.
